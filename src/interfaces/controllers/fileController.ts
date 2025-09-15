@@ -14,7 +14,6 @@ export async function fileController(request: FastifyRequest, reply: FastifyRepl
         }
 
         const data = await request.file()
-        // const file = await request.file(); // Processa o arquivo aqui
         if (!data) {
             reply.status(400).send({ message: 'Nenhum arquivo enviado' });
             return;
