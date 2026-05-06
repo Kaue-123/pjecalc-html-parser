@@ -152,6 +152,5 @@ export const extractProviment = (text: string): IProvimento[] => {
         })
     }
 
-    console.log(provimentoArr)
     return provimentoArr;
 }
