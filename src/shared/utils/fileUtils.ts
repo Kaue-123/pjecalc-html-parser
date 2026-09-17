@@ -67,20 +67,38 @@ export const readFiles = (path: string): string[] => {
  * @constant Processa o arquivo no diretório
  */
 
+const DEBOUNCE_DELAY_MS = 3000;
+
 function processFile(directory: string, callback: FileCallback): void {
     let previousFiles = new Set<string>(readFiles(directory));
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    let isProcessing = false;
 
-    fs.watch(directory, async (event: string, filename: string | null) => {
+    fs.watch(directory, (event: string, filename: string | null) => {
         if (event === 'rename' && filename) {
             const currentFiles = new Set<string>(readFiles(directory));
-            
-            // Checa se há novos arquivos detectados no diretório
+
             if (currentFiles.size > previousFiles.size) {
-                console.log(`Novos arquivos detectados`);
-                await callback(directory);  // Passa o diretório nos arquivos
+                previousFiles = currentFiles;
+
+                if (debounceTimer) {
+                    clearTimeout(debounceTimer);
+                }
+
+                debounceTimer = setTimeout(async () => {
+                    if (isProcessing) return;
+                    isProcessing = true;
+                    console.log(`Novos arquivos detectados. Iniciando processamento...`);
+                    try {
+                        await callback(directory);
+                    } finally {
+                        isProcessing = false;
+                        debounceTimer = null;
+                    }
+                }, DEBOUNCE_DELAY_MS);
+            } else {
+                previousFiles = currentFiles;
             }
-            
-            previousFiles = currentFiles;
         }
     });
 }

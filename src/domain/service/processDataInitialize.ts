@@ -18,6 +18,12 @@ export const processDataInitialize = async (filepath: string) => {
         const filesList = readFiles(filepath)
 
         if (filesList.length > 0) {
+            const total = filesList.length;
+            console.log(`\n========================================`);
+            console.log(`Iniciando processamento de ${total} arquivo(s)...`);
+            console.log(`========================================\n`);
+
+            let fileIndex = 1;
            for (let file of filesList) {
                 const fullfilePath = join(filepath, file)
                 const rawData = await extractData(fullfilePath);
@@ -33,24 +39,23 @@ export const processDataInitialize = async (filepath: string) => {
                     dadosProcesso.dataAjuizamento = new Date(dataAjuizamento);
                 }
                 if (dataLiquidacao) {
-                    dadosProcesso.dataAjuizamento = new Date(dataLiquidacao);
+                    dadosProcesso.dataLiquidacao = new Date(dataLiquidacao);
                 }
                 if (periodoCalculo) {
-                    dadosProcesso.dataAjuizamento = new Date(periodoCalculo);
+                    dadosProcesso.periodoCalculo = new Date(periodoCalculo);
                 }
                 dadosProcesso.reclamado = header.reclamado;
                 dadosProcesso.reclamante = header.reclamante;
                 dadosProcesso.processo = header.processo;
 
-                console.log(dadosProcesso.reclamante);
+                console.log(`[${fileIndex}/${total}] Processando: ${dadosProcesso.reclamante}`);
 
-                await AppDataSource.manager.query("DELETE FROM resumo_calculo WHERE dadosProcessoId = (SELECT id FROM dados_processo WHERE processo = ? LIMIT 1)", dadosProcesso.processo as any);
-                await AppDataSource.manager.query("DELETE FROM provimento_geral WHERE dadosProcessoId = (SELECT id FROM dados_processo WHERE processo = ? LIMIT 1)", dadosProcesso.processo as any);
-                await AppDataSource.manager.query("DELETE FROM dados_processo WHERE processo = ?", dadosProcesso.processo as any);
+                await AppDataSource.manager.query("DELETE FROM dados_processo WHERE processo = ?", [dadosProcesso.processo]);
 
                 await AppDataSource.manager.save(dadosProcesso);
 
                 const saveTime = new SaveTimeEntity()
+                saveTime.name = dadosProcesso.reclamante;
                 saveTime.dadosProcesso = dadosProcesso;
                 await AppDataSource.manager.save(saveTime);
 
@@ -86,8 +91,14 @@ export const processDataInitialize = async (filepath: string) => {
                         index++;
                     }
                 }
-                console.log(dadosProcesso.reclamante + ' finalizado');
+
+                console.log(`[${fileIndex}/${total}] Finalizado: ${dadosProcesso.reclamante}`);
+                fileIndex++;
             }
+
+            console.log(`\n========================================`);
+            console.log(`Todos os ${total} arquivo(s) processados com sucesso.`);
+            console.log(`========================================\n`);
         }
     } catch (error) {
         console.log(error)

@@ -20,7 +20,7 @@ export class ProvimentoGeral {
     @Column()
     ordem: number
   
-    @ManyToOne(() => DadosProcesso, dadosProcesso => dadosProcesso.reclamanteProvimento)
+    @ManyToOne(() => DadosProcesso, dadosProcesso => dadosProcesso.reclamanteProvimento, { onDelete: 'CASCADE' })
     dadosProcesso: DadosProcesso;
   
   }

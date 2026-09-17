@@ -22,7 +22,7 @@ export class ResumoCalculo {
     @Column()
     ordem: number
 
-    @ManyToOne(() => DadosProcesso, dadosProcesso => dadosProcesso.reclamanteResumoCalculo)
+    @ManyToOne(() => DadosProcesso, dadosProcesso => dadosProcesso.reclamanteResumoCalculo, { onDelete: 'CASCADE' })
     dadosProcesso: DadosProcesso;
 
     

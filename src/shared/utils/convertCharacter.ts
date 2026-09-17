@@ -1,15 +1,14 @@
 
 
 export const convertParenthesesToNumber = (value) => {
-    const match = value.match(/\(([^)]+)\)/);
-    const endsWithNumberOrPorcent = /\(\s*\d+(\.\d+)?\s*%\s*\)/.test(value.trim());
-    if (match && !endsWithNumberOrPorcent) {
-        const num = parseFloat(match[1].replace('.', '').replace(',', '.'));
+    const match = value.trim().match(/^\(\s*([\d.]+,\d+)\s*\)$/);
+    if (match) {
+        const num = parseFloat(match[1].replace(/\./g, '').replace(',', '.'));
         if (isNaN(num)) {
             return value;
         }
-        return -num
+        return -num;
     }
-    return value
+    return value;
 }
 
