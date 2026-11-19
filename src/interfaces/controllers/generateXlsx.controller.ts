@@ -20,9 +20,9 @@ export const generateXlsx = async (request: FastifyRequest, reply: FastifyReply)
 
         const safeFileName = localeDate.replace(/\//g, '-');
 
-        XLSX.utils.book_append_sheet(workbook, worksheet, `EATON - PJE HTML`);
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Calculos - PJE HTML`);
 
-        const filePath = join(__dirname, `../../exports/EATON - ${safeFileName}.xlsx`);
+        const filePath = join(__dirname, `../../exports/Calculos - ${safeFileName}.xlsx`);
         XLSX.writeFile(workbook, filePath);
         
         const buffer = await XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });

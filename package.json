@@ -25,19 +25,19 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2"
   },
-  "name": "calculo-api",
+  "name": "pjecalc-html-parser",
   "version": "1.0.0",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Kaue-123/calculo-api.git"
+    "url": "git+https://github.com/Kaue-123/pjecalc-html-parser.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Kaue-123/calculo-api/issues"
+    "url": "https://github.com/Kaue-123/pjecalc-html-parser/issues"
   },
-  "homepage": "https://github.com/Kaue-123/calculo-api#readme",
+  "homepage": "https://github.com/Kaue-123/pjecalc-html-parser#readme",
   "description": ""
 }

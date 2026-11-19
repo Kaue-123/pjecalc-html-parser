@@ -44,7 +44,7 @@ export async function loteManualController(
 
         const dataAtual  = new Date();
         const dataStr    = formattedDate(dataAtual).replace(/\//g, '-');
-        const nomeArquivo = `Lote_EATON_${dataStr}.xlsx`;
+        const nomeArquivo = `Lote_Manual_${dataStr}.xlsx`;
 
         reply
             .header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
